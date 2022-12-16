@@ -1,0 +1,6 @@
+FROM alpine
+COPY portal /usr/bin/portal
+
+# Avoid running as root or named user
+USER 65534
+ENTRYPOINT ["/usr/bin/portal"]

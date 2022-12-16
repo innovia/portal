@@ -1,0 +1,61 @@
+# Default values for portal.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: innovia/portal
+  tag: 0.0.8
+  pullPolicy: IfNotPresent
+  imagePullSecrets: []
+
+service:
+  name: portal
+  type: ClusterIP
+  externalPort: 443
+  internalPort: 8443
+  healthCheckPort: 8080
+
+volumes: []
+
+volumeMounts: []
+
+podAnnotations: {}
+
+labels:
+  app: server
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app
+              operator: In
+              values:
+                - server
+            - key: release
+              operator: In
+              values:
+                - nginx-ingress
+        topologyKey: kubernetes.io/hostname
+
+## Assign a PriorityClassName to pods if set
+priorityClassName: "system-cluster-critical"
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+mtls:
+  ca_cert: ""       # Content of your  ca cert.
+  server_cert: ""   # Content of your server side cert.
+  server_key: ""    # Content of your server side key.
+
